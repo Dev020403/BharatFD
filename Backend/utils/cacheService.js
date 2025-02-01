@@ -20,10 +20,17 @@ const setCache = async (key, value, ttl = 3600) => {
     }
 };
 
+// Improved `clearCache` using SCAN for large datasets
 const clearCache = async (pattern) => {
     try {
-        const keys = await client.keys(pattern);
-        if (keys.length) await client.del(keys);
+        let cursor = 0;
+        do {
+            const reply = await client.scan(cursor, { MATCH: pattern, COUNT: 100 });
+            cursor = reply.cursor;
+            if (reply.keys.length) {
+                await client.del(reply.keys);
+            }
+        } while (cursor !== 0);
     } catch (error) {
         console.error('Redis Clear Error:', error);
     }
