@@ -15,7 +15,10 @@ exports.getFAQs = async (req, res) => {
 
         const faqs = await FAQ.find();
         const translatedFAQs = await Promise.all(
-            faqs.map(async (faq) => await faq.getTranslatedText(lang))
+            faqs.map(async (faq) => ({
+                _id: faq._id,
+                ...(await faq.getTranslatedText(lang))
+            }))
         );
 
         await setCache(cacheKey, JSON.stringify(translatedFAQs));
@@ -25,6 +28,7 @@ exports.getFAQs = async (req, res) => {
         res.status(500).json({ message: 'Error fetching FAQs', error: error.message });
     }
 };
+
 
 // Helper function to update cache after DB changes
 const updateCache = async () => {
