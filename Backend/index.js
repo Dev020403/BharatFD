@@ -1,8 +1,8 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const faqRoutes = require('./routes/faqRoutes');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import faqRoutes from './routes/faqRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -24,11 +24,13 @@ app.get('/', (req, res) => {
 app.use('/api', faqRoutes);
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Export the app for testing
+export { app, server };
 
 // Graceful shutdown
 process.on('SIGINT', () => {
-    client.quit();
     mongoose.connection.close(() => {
         console.log('MongoDB connection closed');
         process.exit(0);
@@ -36,7 +38,6 @@ process.on('SIGINT', () => {
 });
 
 process.on('SIGTERM', () => {
-    client.quit();
     mongoose.connection.close(() => {
         console.log('MongoDB connection closed');
         process.exit(0);

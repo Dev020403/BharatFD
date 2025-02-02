@@ -1,9 +1,9 @@
-const FAQ = require('../models/faqSchema');
-const { translate } = require('@vitalets/google-translate-api');
-const { getCache, setCache, clearCache } = require('../utils/cacheService');
+import FAQ from '../models/faqSchema.js';
+import { translate } from '@vitalets/google-translate-api';
+import { getCache, setCache, clearCache } from '../utils/cacheService.js';
 
 // Fetch all FAQs with language support
-exports.getFAQs = async (req, res) => {
+export const getFAQs = async (req, res) => {
     try {
         const lang = req.query.lang || 'en';
         const cacheKey = `faqs:${lang}`;
@@ -29,14 +29,13 @@ exports.getFAQs = async (req, res) => {
     }
 };
 
-
 // Helper function to update cache after DB changes
 const updateCache = async () => {
     await clearCache('faqs:*');  // Clears all cached FAQ entries
 };
 
 // Create a new FAQ
-exports.createFAQ = async (req, res) => {
+export const createFAQ = async (req, res) => {
     try {
         const { question, answer } = req.body;
         if (!question || !answer) {
@@ -66,7 +65,7 @@ exports.createFAQ = async (req, res) => {
 };
 
 // Update an existing FAQ
-exports.updateFAQ = async (req, res) => {
+export const updateFAQ = async (req, res) => {
     try {
         const { id } = req.params;
         const { question, answer } = req.body;
@@ -104,7 +103,7 @@ exports.updateFAQ = async (req, res) => {
 };
 
 // Delete an FAQ
-exports.deleteFAQ = async (req, res) => {
+export const deleteFAQ = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedFAQ = await FAQ.findByIdAndDelete(id);

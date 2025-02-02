@@ -2,9 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "mocha tests/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +26,8 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "chai": "^5.1.2",
+    "chai": "^4.5.0",
+    "chai-http": "^5.1.1",
     "mocha": "^11.1.0",
     "supertest": "^7.0.0"
   }

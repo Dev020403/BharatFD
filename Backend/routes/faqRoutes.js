@@ -1,17 +1,18 @@
-const express = require('express');
+import express from 'express';
+import { getFAQs, createFAQ, updateFAQ, deleteFAQ } from '../controllers/faqController.js';
+
 const router = express.Router();
-const faqController = require('../controllers/faqController');
 
 // Fetch all FAQs
-router.get('/faqs', faqController.getFAQs);
+router.get('/faqs', getFAQs);
 
 // Create a new FAQ
-router.post('/faqs', faqController.createFAQ);
+router.post('/faqs', createFAQ);
 
 // Update an FAQ
-router.put('/faqs/:id', faqController.updateFAQ);
+router.put('/faqs/:id', updateFAQ);
 
 // Delete an FAQ
-router.delete('/faqs/:id', faqController.deleteFAQ);
+router.delete('/faqs/:id', deleteFAQ);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const { createClient } = require('redis');
+import { createClient } from 'redis';
 
 const client = createClient();
 client.connect();
@@ -36,4 +36,4 @@ const clearCache = async (pattern) => {
     }
 };
 
-module.exports = { getCache, setCache, clearCache };
+export { getCache, setCache, clearCache };
