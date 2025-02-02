@@ -1,9 +1,16 @@
 import { createClient } from 'redis';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const client = createClient();
+const client = createClient({
+    url: process.env.REDIS,
+});
+
+client.on('error', (err) => console.error('Redis Client Error:', err));
+
 client.connect();
 
-const getCache = async (key) => {
+export const getCache = async (key) => {
     try {
         return await client.get(key);
     } catch (error) {
@@ -12,7 +19,7 @@ const getCache = async (key) => {
     }
 };
 
-const setCache = async (key, value, ttl = 3600) => {
+export const setCache = async (key, value, ttl = 3600) => {
     try {
         await client.setEx(key, ttl, value);
     } catch (error) {
@@ -20,8 +27,7 @@ const setCache = async (key, value, ttl = 3600) => {
     }
 };
 
-// Improved `clearCache` using SCAN for large datasets
-const clearCache = async (pattern) => {
+export const clearCache = async (pattern) => {
     try {
         let cursor = 0;
         do {
@@ -35,5 +41,3 @@ const clearCache = async (pattern) => {
         console.error('Redis Clear Error:', error);
     }
 };
-
-export { getCache, setCache, clearCache };
