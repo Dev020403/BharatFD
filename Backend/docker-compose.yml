@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: faq_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/faqdb
+      - REDIS_HOST=redis
+      - PORT=8000
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  mongo:
+    image: mongo
+    container_name: faq_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis
+    container_name: faq_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongo_data:
